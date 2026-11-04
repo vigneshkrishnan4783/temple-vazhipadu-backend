@@ -100,11 +100,12 @@ public class OrderService {
                         .orElseGet(() -> new DailyOfferingQuota(offering.getId(), request.getBookingDate(), 0));
 
                 if (quota.getBookedCount() + itemReq.getQuantity() > offering.getDailyLimit()) {
-                    throw new ConflictException(String.format(
-                            "Offering '%s' has exceeded its daily limit of %d for date %s (already booked: %d, requested: %d)",
-                            offering.getName(), offering.getDailyLimit(), request.getBookingDate(),
-                            quota.getBookedCount(), itemReq.getQuantity()
-                    ));
+                    String errorMsg = (quota.getBookedCount() >= offering.getDailyLimit())
+                            ? String.format("Offering '%s' has already reached or exceeded its daily limit of %d for date %s (currently booked: %d)",
+                            offering.getName(), offering.getDailyLimit(), request.getBookingDate(), quota.getBookedCount())
+                            : String.format("Offering '%s' has exceeded its daily limit of %d for date %s (already booked: %d, requested: %d)",
+                            offering.getName(), offering.getDailyLimit(), request.getBookingDate(), quota.getBookedCount(), itemReq.getQuantity());
+                    throw new ConflictException(errorMsg);
                 }
 
                 quota.setBookedCount(quota.getBookedCount() + itemReq.getQuantity());
