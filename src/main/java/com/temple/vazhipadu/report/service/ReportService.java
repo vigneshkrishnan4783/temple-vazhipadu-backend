@@ -76,6 +76,7 @@ public class ReportService {
         for (OfferingCollectionSummary summary : offeringSummaries) {
             calculatedGrandTotal = calculatedGrandTotal.add(summary.getTotalAmount());
         }
+        calculatedGrandTotal = calculatedGrandTotal.setScale(2, RoundingMode.HALF_UP);
 
         return new DailyCollectionReportResponse(
                 templeId,
