@@ -36,6 +36,12 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<OrderResponse> cancelOrder(@PathVariable Long id) {
+        OrderResponse response = orderService.cancelOrder(id);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
     public ResponseEntity<com.temple.vazhipadu.common.dto.PagedResponse<OrderResponse>> searchOrders(
             @RequestParam Long templeId,
