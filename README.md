@@ -28,10 +28,10 @@ Built strictly according to team Git workflow with independent feature branches,
 
 | PR # | Branch | Summary | Review Comment & Fix | Status |
 |:---:|:---|:---|:---|:---:|
-| **[#1](docs/pull-requests/PR1-offerings-and-orders.md)** | `feature/p1-offerings` | Offerings catalog CRUD, server-side order total calculation, and standardized error model | Validated & rejected duplicate offering IDs in single order requests | **Merged** |
-| **[#2](docs/pull-requests/PR2-order-search.md)** | `feature/p2-order-search` | High-volume order search by temple, date, status, phone number with composite indexes and pagination | Capped page size at max 100 to prevent OOM/GC pressure | **Merged** |
-| **[#3](docs/pull-requests/PR3-daily-limits.md)** | `feature/p3-daily-limits` | Thread-safe daily quota enforcement with pessimistic row locking and 20-thread stress tests | Clarified error message when quota is already saturated vs newly exceeded | **Merged** |
-| **[#4](docs/pull-requests/PR4-cancellation-and-reports.md)** | `feature/p4-cancellation-and-reports` | Order cancellation with automatic quota freeing and paisa-accurate IST daily collection reports | Enforced strict scale 2 with `RoundingMode.HALF_UP` on financial grand totals | **Merged** |
+| **[#1](https://github.com/vigneshkrishnan4783/temple-vazhipadu-backend/pull/1)** ([Doc](docs/pull-requests/PR1-offerings-and-orders.md)) | `feature/p1-offerings` | Offerings catalog CRUD, server-side order total calculation, and standardized error model | Validated & rejected duplicate offering IDs in single order requests | **Merged** |
+| **[#2](https://github.com/vigneshkrishnan4783/temple-vazhipadu-backend/pull/2)** ([Doc](docs/pull-requests/PR2-order-search.md)) | `feature/p2-order-search` | High-volume order search by temple, date, status, phone number with composite indexes and pagination | Capped page size at max 100 to prevent OOM/GC pressure | **Merged** |
+| **[#3](https://github.com/vigneshkrishnan4783/temple-vazhipadu-backend/pull/3)** ([Doc](docs/pull-requests/PR3-daily-limits.md)) | `feature/p3-daily-limits` | Thread-safe daily quota enforcement with pessimistic row locking and 20-thread stress tests | Clarified error message when quota is already saturated vs newly exceeded | **Merged** |
+| **[#4](https://github.com/vigneshkrishnan4783/temple-vazhipadu-backend/pull/4)** ([Doc](docs/pull-requests/PR4-cancellation-and-reports.md)) | `feature/p4-cancellation-and-reports` | Order cancellation with automatic quota freeing and paisa-accurate IST daily collection reports | Enforced strict scale 2 with `RoundingMode.HALF_UP` on financial grand totals | **Merged** |
 
 *Detailed descriptions and line comment reviews for all PRs are documented in `docs/pull-requests/`.*
 
