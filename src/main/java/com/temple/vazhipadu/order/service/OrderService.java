@@ -33,6 +33,14 @@ public class OrderService {
             throw new BadRequestException("Order must contain at least one offering item");
         }
 
+        // Validate uniqueness of offerings in the same order request
+        java.util.Set<Long> seenOfferings = new java.util.HashSet<>();
+        for (OrderItemRequest itemReq : request.getItems()) {
+            if (itemReq.getOfferingId() != null && !seenOfferings.add(itemReq.getOfferingId())) {
+                throw new BadRequestException("Duplicate offering id " + itemReq.getOfferingId() + " in order. Please consolidate quantities.");
+            }
+        }
+
         BigDecimal calculatedTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
         Order order = new Order(
                 request.getTempleId(),

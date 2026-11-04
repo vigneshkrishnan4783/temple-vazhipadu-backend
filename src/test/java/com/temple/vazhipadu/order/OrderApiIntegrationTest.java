@@ -170,4 +170,32 @@ class OrderApiIntegrationTest {
                 .andExpect(jsonPath("$.error", is("Bad Request")))
                 .andExpect(jsonPath("$.message", is("Validation failed for request body")));
     }
+
+    @Test
+    @DisplayName("P1 Review Fix: Duplicate offerings in a single order request are rejected")
+    void testOrderWithDuplicateOfferingsIsRejected() throws Exception {
+        Long templeId = 101L;
+
+        OfferingResponse pushpanjali = offeringService.createOffering(
+                new CreateOfferingRequest(templeId, "Pushpanjali Duplicate Test", new BigDecimal("30.00"), true, null)
+        );
+
+        CreateOrderRequest request = new CreateOrderRequest(
+                templeId,
+                "Karthik",
+                "9888877777",
+                "Bharani",
+                LocalDate.now().plusDays(1),
+                List.of(
+                        new OrderItemRequest(pushpanjali.getId(), 1),
+                        new OrderItemRequest(pushpanjali.getId(), 2)
+                )
+        );
+
+        mockMvc.perform(post("/api/v1/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", is("Duplicate offering id " + pushpanjali.getId() + " in order. Please consolidate quantities.")));
+    }
 }
