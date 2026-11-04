@@ -139,6 +139,38 @@ public class OrderService {
         return OrderResponse.fromEntity(order);
     }
 
+    public OrderResponse cancelOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new BadRequestException("Order is already cancelled");
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+
+        // Sort items by offeringId ASC to avoid deadlocks
+        List<OrderItem> items = new ArrayList<>(order.getItems());
+        items.sort(Comparator.comparing(OrderItem::getOfferingId));
+
+        for (OrderItem item : items) {
+            Offering offering = offeringRepository.findByIdForUpdate(item.getOfferingId())
+                    .orElse(null);
+
+            if (offering != null && offering.getDailyLimit() != null) {
+                dailyOfferingQuotaRepository.findByOfferingIdAndBookingDate(offering.getId(), order.getBookingDate())
+                        .ifPresent(quota -> {
+                            int newCount = Math.max(0, quota.getBookedCount() - item.getQuantity());
+                            quota.setBookedCount(newCount);
+                            dailyOfferingQuotaRepository.save(quota);
+                        });
+            }
+        }
+
+        Order saved = orderRepository.save(order);
+        return OrderResponse.fromEntity(saved);
+    }
+
     @Transactional(readOnly = true)
     public PagedResponse<OrderResponse> searchOrders(
             Long templeId,

@@ -48,7 +48,7 @@ public class Order {
     @Column(name = "status", nullable = false, length = 20)
     private OrderStatus status = OrderStatus.CONFIRMED;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
