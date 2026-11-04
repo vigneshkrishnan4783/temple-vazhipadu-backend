@@ -111,6 +111,8 @@ public class OrderService {
         }
         if (size <= 0) {
             size = 20;
+        } else if (size > 100) {
+            size = 100; // Cap to maximum 100 items per page to prevent OOM
         }
 
         // Stable ordering: primary by createdAt DESC, tie-breaker by id DESC
